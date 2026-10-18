@@ -1,0 +1,278 @@
+/* =========================================================
+   Memory game — 2026 design language
+   Built on ../site.css (tokens, nav, loader, sound switch) and
+   ../case-study-2026.css (nav band, crumbs, pixel title).
+   Layout: [side column | rule | hairline board].
+   ========================================================= */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.confetti,
+.connect {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.connect { z-index: 8; overflow: visible; }
+.confetti { z-index: 95; }
+
+/* The game stays playable on phones (site.css hides .site there by default) */
+@media (max-width: 767px) {
+  .mem-site { display: block; }
+}
+
+.nav__links a[aria-current="page"] { color: var(--ink); }
+
+/* ---------- Layout ---------- */
+.mem-main {
+  display: grid;
+  grid-template-columns: 323px minmax(0, 1fr);
+  margin-left: var(--pad-x);
+  min-height: calc(100vh - 196px); /* viewport minus nav band + crumbs */
+}
+
+.mem-side {
+  padding: 80px 50px 80px 0;
+  display: flex;
+  flex-direction: column;
+}
+.mem-title { font-size: min(84px, 5.6vw); white-space: nowrap; } /* "Memory" fits the 273px column on one line */
+.mem-lede { margin-top: 24px; font-size: 18px; line-height: 1.4; color: var(--muted); }
+
+/* Stat rules run end to end: from the viewport edge to the side rule */
+.mem-stats {
+  margin: 64px -50px 0 calc(-1 * var(--pad-x));
+  border-top: 1px solid var(--line);
+}
+.mem-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 18px 50px 18px var(--pad-x);
+  border-bottom: 1px solid var(--line);
+}
+.mem-stat dt {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mem-stat dd {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.stat-num { display: inline-block; }
+.mem-hint { margin-top: auto; padding-top: 40px; font-size: 14px; color: var(--muted); }
+
+/* Board runs rule-to-rule: from the crumbs line to the bottom of the viewport,
+   flush against the side rule, with square cells */
+.mem-stage {
+  border-left: 1px solid var(--line);
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* ---------- Board: a hairline grid of cells ---------- */
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  width: 100%;                     /* cells stretch to fill the stage */
+  height: calc(100vh - 196px);     /* viewport below the nav band + crumbs */
+}
+
+.card {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  perspective: 1200px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.card:focus { outline: none; }
+.card:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.65s var(--ease-liquid);
+}
+.card.is-flipped .card-inner { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.4s var(--ease-liquid);
+}
+
+/* Face down: an empty cell with a pixel plus */
+.card-back::before {
+  content: "+";
+  font-family: "Geist Pixel", monospace;
+  font-variation-settings: "ELSH" 1;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink);
+  transition: transform 0.5s var(--ease-liquid), color 0.3s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:not(.is-matched):not(.is-flipped):hover .card-back { background: #f5f5f5; }
+  .card:not(.is-matched):not(.is-flipped):hover .card-back::before { transform: rotate(90deg) scale(1.3); }
+}
+
+/* Face up: ink tile (like the cursor pill); settles to a grey tile once matched */
+.card-front {
+  transform: rotateY(180deg);
+  padding: 12px;
+  text-align: center;
+  background: var(--ink);
+  color: #fff;
+}
+.card.is-matched .card-front { background: var(--tile); color: var(--ink); }
+
+.icon { width: 44px; height: 44px; color: currentColor; }
+/* Icon-only faces (as in the mock); the name stays for screen readers via the card's aria-label */
+.skill { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+.check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  color: var(--ink);
+  opacity: 0;
+}
+.card.is-matched .check { opacity: 1; }
+
+.shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+/* ---------- Win panel ---------- */
+.win {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.72);
+}
+.win[hidden] { display: none !important; }
+.win.is-in { opacity: 1; pointer-events: auto; }
+
+.win-panel {
+  width: min(440px, 100%);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  padding: 48px 40px 36px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+.badge-visual { width: 140px; height: 140px; margin: 0 auto 20px; position: relative; }
+.badge-visual .badge-img { width: 100%; height: 100%; object-fit: contain; }
+.badge-visual:empty { display: none; }
+
+.win-title { font-size: 44px; line-height: 1.1; }
+.win-meta { margin-top: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Rules run end to end across the panel (cancel its 40px side padding) */
+.win-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 32px -40px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.win-stat { display: flex; flex-direction: column-reverse; gap: 8px; padding-block: 20px; }
+.win-stat + .win-stat { border-left: 1px solid var(--line); }
+.win-stat-val { font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; }
+.win-stat-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+.win-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 32px; }
+.mem-btn {
+  height: 48px;
+  padding: 0 20px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 0.3s var(--ease-liquid), color 0.3s var(--ease-liquid);
+}
+.mem-btn:hover { background: var(--ink); color: #fff; }
+.mem-btn--solid { background: var(--ink); color: #fff; }
+.mem-btn--solid:hover { background: #222; }
+
+.win-port { display: inline-block; margin-top: 24px; color: var(--muted); transition: color 0.3s; }
+.win-port:hover { color: var(--ink); }
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 1100px) {
+  .mem-main { grid-template-columns: 260px minmax(0, 1fr); }
+  .mem-side { padding-right: 32px; }
+  .mem-stats { margin-right: -32px; }
+  .mem-stat { padding-right: 32px; }
+  .mem-stage { padding-left: 32px; }
+}
+@media (max-width: 900px) {
+  .mem-main { grid-template-columns: 1fr; margin-left: 0; min-height: 0; }
+  .mem-side { padding: 48px var(--pad-x) 32px; }
+  .mem-stats { margin: 32px calc(-1 * var(--pad-x)) 0; }
+  .mem-stat { padding-inline: var(--pad-x); }
+  .mem-hint { display: none; }
+  .mem-stage { border-left: 0; border-top: 1px solid var(--line); }
+  .board { width: 100%; height: auto; aspect-ratio: 5 / 4; }
+}
+@media (max-width: 767px) {
+  .nav__links { display: none; }
+  .ce-navband { padding-bottom: 24px; }
+  .nav { margin-top: 24px; }
+  .mem-title { font-size: 64px; }
+  .board { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); aspect-ratio: 4 / 5; height: auto; }
+  .icon { width: 28px; height: 28px; }
+  .win-actions { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-inner { transition: none; }
+}

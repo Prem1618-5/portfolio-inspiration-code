@@ -1,0 +1,248 @@
+/* =========================================================
+   Case study — Figma "Personal 2026 / Community Experience"
+   Built on site.css. Hairline grid: nav | crumbs | hero | metrics |
+   cover | [index | content column] | contact | footer.
+   Content column (1440 frame): rule at x=373, text at +100,
+   media at +129, 888px wide.
+   ========================================================= */
+
+.ce-page { --text-in: 100px; --media-in: 129px; --col-out: 50px; }
+
+/* ---------- Nav band + crumbs ---------- */
+.ce-navband { padding-bottom: 46px; } /* signature svg is 36px tall vs 32px text in Figma */
+.ce-crumbs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  padding-inline: var(--pad-x);
+}
+.ce-crumbs__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  line-height: 1;
+  transition: gap 0.4s var(--ease-liquid);
+}
+.ce-crumbs__link:hover { gap: 22px; }
+/* The Figma "back" arrow is exported unflipped (the design mirrors it with a transform) */
+.ce-crumbs__link:not(.ce-crumbs__link--next) img { transform: scaleX(-1); }
+
+/* ---------- Hero (split at the page centre) ---------- */
+.ce-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 400px;
+}
+.ce-hero__left {
+  display: flex;
+  align-items: center;
+  padding: 100px 50px 100px var(--pad-x);
+}
+.ce-hero__title {
+  font-family: "Geist Pixel", monospace;
+  font-variation-settings: "ELSH" 1;
+  font-weight: 400;
+  font-size: min(100px, 7vw);
+  line-height: 1;
+}
+.ce-hero__title .char { font-variation-settings: "ELSH" min(20, calc(var(--elsh, 1) + var(--melt, 0))); } /* hover (--elsh, per letter) + scroll melt (--melt, whole title) */
+.ce-hero__right {
+  position: relative;
+  padding: 50px var(--pad-x) 50px 50px;
+}
+.ce-hero__right::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+.ce-hero__lede { font-size: 32px; line-height: 1.4; max-width: 620px; }
+.ce-hero__desc {
+  margin-top: 32px;
+  max-width: 570px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.ce-hero__desc strong { font-weight: 500; }
+
+/* ---------- Metrics ---------- */
+.ce-metrics { padding-block: 50px; }
+.ce-metrics__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 434fr) minmax(0, 460fr) minmax(0, 446fr);
+}
+.ce-metric {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  line-height: 1;
+}
+.ce-metric + .ce-metric::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -50px;
+  bottom: -50px;
+  width: 1px;
+  background: var(--line);
+  transform-origin: top;
+  transform: scaleY(var(--draw, 1));
+}
+.ce-metric__value { font-weight: 700; font-size: 32px; }
+.ce-metric__label { color: var(--muted); }
+
+/* ---------- Cropped frames (Figma image fills) ---------- */
+.ce-frame { position: relative; overflow: hidden; width: 100%; }
+.ce-frame img { position: absolute; max-width: none; }
+.ce-frame--round { border-radius: 24px; }
+
+/* ---------- Body: index + content column ---------- */
+.ce-body {
+  display: grid;
+  grid-template-columns: 323px minmax(0, 1fr);
+  margin-left: var(--pad-x);
+}
+.ce-index { position: sticky; top: 100px; align-self: start; padding-block: 100px; } /* bottom padding keeps the list clear of the closing rule */
+.ce-index__list {
+  list-style: none;
+  margin: 0;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.ce-index__list a { color: var(--muted); transition: color 0.3s var(--ease-liquid); }
+.ce-index__list a:hover { color: var(--ink); }
+.ce-index__list a.is-active { color: var(--ink); font-weight: 500; }
+
+/* The body is offset by the page gutter; stretch its closing rule back to the viewport edge */
+.ce-body.band::after { left: calc(-1 * var(--pad-x)); }
+.ce-content { border-left: 1px solid var(--line); min-width: 0; }
+.ce-block + .ce-block { border-top: 1px solid var(--line); }
+
+/* Text blocks */
+.ce-text { padding: 100px var(--col-out) 100px var(--text-in); }
+.ce-text > * { max-width: 917px; }
+.ce-title { font-weight: 500; font-size: 24px; line-height: 1.2; }
+.ce-copy { margin-top: 24px; color: var(--muted); display: flex; flex-direction: column; gap: 16px; }
+.ce-subtitle { margin-top: 100px; font-weight: 500; font-size: 20px; line-height: 1.2; }
+.ce-lead { margin-top: 24px; font-size: 18px; line-height: 1.2; color: var(--muted); }
+.ce-flow { margin-top: 50px; display: flex; flex-direction: column; gap: 24px; }
+.ce-flow__steps { font-weight: 500; font-size: 18px; line-height: 1.1; }
+.ce-flow__note { color: var(--muted); }
+.ce-quote { margin-top: 50px; }
+
+/* Media blocks (padding set per block to match the design's crops) */
+.ce-media { padding-left: var(--media-in); padding-right: var(--col-out); }
+.ce-media > * { max-width: 888px; }
+.ce-media figcaption { position: relative; text-align: center; color: var(--muted); }
+
+/* Feature row */
+.ce-features {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 151px;
+  padding-inline: 50px;
+}
+.ce-features > div { display: flex; flex-direction: column; gap: 8px; }
+.ce-features dt { font-weight: 500; line-height: 1.1; }
+.ce-features dd { color: var(--muted); }
+.ce-features__rule { align-self: stretch; width: 1px; background: var(--line); }
+
+/* Stat row (same voice as the metrics band) */
+.ce-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+/* Padding lives on the cells so the dividers run rule-to-rule */
+.ce-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 50px 16px;
+  text-align: center;
+  line-height: 1;
+}
+.ce-stats > div + div { border-left: 1px solid var(--line); }
+.ce-stats dt { font-weight: 700; font-size: 32px; white-space: nowrap; }
+.ce-stats dd { color: var(--muted); line-height: 1.3; }
+
+/* Numbered feature cards (Slot Booking 01–04) */
+.ce-card__num { color: var(--muted); margin-bottom: 12px; }
+.ce-card__sub {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ce-frame--outline { border: 1px solid var(--line); }
+
+/* Charts */
+.ce-chart { padding: 100px var(--col-out) 100px var(--media-in); }
+.ce-chart > * { max-width: 888px; }
+.ce-chart__num { font-weight: 700; font-size: 44px; line-height: 1.2; }
+.ce-chart__label { margin-top: 8px; color: var(--muted); line-height: 1.2; }
+.ce-chart .ce-frame { margin-top: 24px; }
+.ce-chart__cap { margin-top: 8px; text-align: center; color: var(--muted); line-height: 1.2; }
+
+/* Voices */
+.ce-voices {
+  display: flex;
+  gap: 16px;
+  margin-top: 100px;
+  margin-left: calc(var(--media-in) - var(--text-in));
+  max-width: 888px;
+}
+.ce-voices img, .ce-voices__crop { border-radius: 24px; }
+.ce-voices__main { flex: 0 0 44.3%; min-width: 0; width: 44.3%; height: auto; aspect-ratio: 393 / 314; object-fit: cover; }
+.ce-voices__stack { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.ce-voices__stack > img { width: 100%; height: auto; object-fit: cover; }
+.ce-voices__crop { position: relative; overflow: hidden; }
+.ce-voices__crop img { position: absolute; left: 0; width: 100%; max-width: none; border-radius: 0; }
+
+/* Takeaway image sits flush on the body's bottom rule */
+.ce-text#takeaway { padding-bottom: 0; }
+.ce-takeaway__img {
+  margin-top: 100px;
+  margin-left: calc(var(--media-in) - var(--text-in));
+  max-width: 888px;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 1100px) {
+  .ce-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ce-stats > div:nth-child(3) { border-left: 0; }
+  .ce-stats > div:nth-child(n + 3) { border-top: 1px solid var(--line); }
+  .ce-stats dt { font-size: 26px; }
+  .ce-page { --text-in: 56px; --media-in: 56px; --col-out: 32px; }
+  .ce-hero__lede { font-size: 26px; }
+  .ce-voices, .ce-takeaway__img { margin-left: 0; }
+}
+@media (max-width: 900px) {
+  .ce-hero { grid-template-columns: 1fr; }
+  .ce-hero__left { padding-block: 64px 32px; }
+  .ce-hero__right { padding: 32px var(--pad-x) 64px; }
+  .ce-hero__right::before { display: none; }
+  .ce-hero__title { font-size: 72px; }
+  .ce-body { grid-template-columns: 1fr; margin-left: 0; }
+  .ce-body.band::after { left: 0; }
+  .ce-index { display: none; }
+  .ce-content { border-left: 0; }
+  .ce-page { --text-in: var(--pad-x); --media-in: var(--pad-x); --col-out: var(--pad-x); }
+  .ce-features { flex-direction: column; align-items: flex-start; gap: 24px; padding: 40px var(--pad-x); }
+  .ce-features__rule { display: none; }
+}

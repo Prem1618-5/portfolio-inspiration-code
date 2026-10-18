@@ -1,0 +1,87 @@
+/* Grain: a fine film over everything, nudged a few times a second (transform only) */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  animation: grain 0.9s steps(6) infinite;
+  will-change: transform;
+}
+@keyframes grain {
+  0%   { transform: translate(0, 0); }
+  17%  { transform: translate(-3%, 2%); }
+  33%  { transform: translate(2%, -4%); }
+  50%  { transform: translate(-4%, -1%); }
+  67%  { transform: translate(3%, 3%); }
+  83%  { transform: translate(-1%, 4%); }
+  100% { transform: translate(1%, -2%); }
+}
+@media (prefers-reduced-motion: reduce) { .grain { animation: none; } }
+
+/* Reading progress: white + difference reads on the page and over pictures */
+.progress {
+  position: fixed; right: 16px; top: 50%; translate: 0 -50%; z-index: var(--z-progress);
+  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  color: #fff; mix-blend-mode: difference; pointer-events: none;
+}
+.progress__value { font-size: 11px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; opacity: 0.8; }
+.progress__line { position: relative; width: 1px; height: 120px; background: rgba(255, 255, 255, 0.22); overflow: hidden; }
+.progress__fill { position: absolute; inset: 0; background: #fff; transform-origin: 50% 0; transform: scaleY(0); }
+
+/* Cursor pill: replaces the pointer over [data-cursor-pill]; white trail blends with difference */
+@media (hover: hover) and (pointer: fine) { [data-cursor-pill] { cursor: none; } }
+.cursor-trail {
+  position: fixed; inset: 0; width: 100vw; height: 100vh;
+  z-index: var(--z-trail); pointer-events: none; mix-blend-mode: difference;
+}
+.cursor-pill {
+  position: fixed; top: 0; left: 0; z-index: var(--z-pill); pointer-events: none;
+  padding: 9px 14px 8px; border-radius: var(--radius-pill);
+  background: var(--ink); color: #fff;
+  font-size: 12px; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+  transform-origin: 0 0; will-change: transform; visibility: hidden;
+}
+.cursor-pill.has-note { padding: 11px 16px 12px; border-radius: 18px; }
+.cursor-pill__note {
+  display: block; margin-top: 7px; font-size: 13px; line-height: 1.2; letter-spacing: 0;
+  text-transform: none; color: rgba(255, 255, 255, 0.7);
+}
+
+/* About: photo trail that follows the cursor */
+.about-trail { position: fixed; inset: 0; z-index: var(--z-trail-photos); pointer-events: none; overflow: hidden; }
+.about-trail img {
+  position: absolute; left: 0; top: 0; width: 170px; height: 226px; object-fit: cover;
+  border-radius: 2px; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18); will-change: transform, opacity;
+}
+
+/* Phones: "open this on a desktop" note instead of the site */
+.mobile-gate { display: none; }
+@media (max-width: 767px) {
+  .site { display: none; }
+  .loader { display: none !important; }
+  .mobile-gate {
+    min-height: 100vh; min-height: 100svh;
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    gap: 40px; padding: 100px 32px 44px; text-align: center;
+  }
+  .mobile-gate__brand .signature { height: 58px; }
+  .mobile-gate__body { display: flex; flex-direction: column; gap: 24px; max-width: 376px; }
+  .mobile-gate__title { font-weight: 500; font-size: clamp(30px, 9.1vw, 40px); line-height: 1.3; }
+  .mobile-gate__sub { font-size: clamp(19px, 5.5vw, 24px); line-height: 1.5; }
+  .mobile-gate__links {
+    align-self: stretch; margin: 0 -32px -44px;
+    display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line);
+  }
+  .mobile-gate__links a {
+    display: flex; align-items: center; justify-content: center; min-height: 88px;
+    padding: 0 4px env(safe-area-inset-bottom);
+    font-weight: 500; font-size: 16px; line-height: 1.1; text-transform: uppercase;
+    transition: opacity 0.3s var(--ease-liquid);
+  }
+  .mobile-gate__links a + a { border-left: 1px solid var(--line); }
+  .mobile-gate__links a:active { opacity: 0.5; }
+}

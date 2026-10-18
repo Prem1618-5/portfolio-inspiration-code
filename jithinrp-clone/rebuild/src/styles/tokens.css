@@ -1,0 +1,70 @@
+/* Design tokens — values extracted from jithinrp.com (see ../../../tokens/tokens.md) */
+
+@font-face { font-family: "Aeonik"; src: url("/fonts/Aeonik-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Aeonik"; src: url("/fonts/Aeonik-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Aeonik"; src: url("/fonts/Aeonik-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Awesome Serif Italic"; src: url("/fonts/AwesomeSerifItalic-VF.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
+@font-face { font-family: "Geist Pixel"; src: url("/fonts/GeistPixel-VF.woff2") format("woff2"); font-display: block; }
+@font-face { font-family: "Digital Planers"; src: url("/fonts/DigitalPlaners.woff2") format("woff2"); font-display: swap; }
+
+:root {
+  /* colour */
+  --ink: #000;
+  --bg: #fff;
+  --muted: rgba(0, 0, 0, 0.6);
+  --muted-2: rgba(0, 0, 0, 0.5);
+  --ink-72: rgba(0, 0, 0, 0.72);
+  --line: #e2e2e2;
+  --tile: #ebebeb;
+  --tile-hover: #dcdcdc;
+  --media-bg: #f2f2f2;
+  --button-wash: rgba(0, 0, 0, 0.06);
+  --button-wash-hover: rgba(0, 0, 0, 0.1);
+  --scrim: rgba(10, 10, 10, 0.5);
+  --panel: #fafafa;
+  --text-strong: #111;
+  --text-body: #333;
+  --text-soft: #555;
+  --text-faint: #8a8a8a;
+  --text-ghost: #9a9a9a;
+  --text-gate: #494949;
+  --ghost-ink: #d9d9d9;
+
+  /* type */
+  --font-body: "Aeonik", system-ui, sans-serif;
+  --font-display: "Awesome Serif Italic", serif;
+  --font-pixel: "Geist Pixel", monospace;
+  --font-script: "Digital Planers", cursive;
+
+  /* layout */
+  --max: 1340px;
+  --gutter: 50px;
+  --pad-x: max(var(--gutter), calc((100vw - var(--max)) / 2));
+  --band: 100px;
+  --band-sm: 50px;
+
+  /* shape + depth */
+  --radius-tile: 16px;
+  --radius-chip: 10px;
+  --radius-modal: 20px;
+  --radius-pill: 999px;
+  --shadow-modal: 0 40px 120px rgba(0, 0, 0, 0.25);
+
+  /* motion */
+  --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* stacking */
+  --z-site: 1;
+  --z-trail-photos: 60;
+  --z-progress: 90;
+  --z-navbar: 92;
+  --z-trail: 99;
+  --z-pill: 100;
+  --z-loader: 1000;
+  --z-grain: 1002;
+  --z-modal: 2000;
+}
+
+@media (max-width: 1100px) {
+  :root { --gutter: 32px; --band: 80px; }
+}

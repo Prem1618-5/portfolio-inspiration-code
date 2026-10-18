@@ -1,0 +1,37 @@
+/* Project modal */
+.pmodal { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; padding: 32px 16px; }
+.pmodal[hidden] { display: none; }
+.pmodal__backdrop { position: absolute; inset: 0; background: var(--scrim); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.pmodal__panel {
+  position: relative; width: min(860px, 100%); max-height: calc(100vh - 64px); overflow-y: auto; overscroll-behavior: contain;
+  background: var(--panel); color: var(--text-strong); border-radius: var(--radius-modal); padding: 56px 64px 64px; outline: none;
+  box-shadow: var(--shadow-modal); cursor: auto; clip-path: inset(0 round var(--radius-modal));
+  scrollbar-width: thin; scrollbar-color: rgba(0, 0, 0, 0.22) transparent;
+}
+.pmodal__close {
+  position: sticky; top: 0; float: right; margin: -32px -40px 0 0; width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: #fff; display: grid; place-items: center; z-index: 1;
+}
+.pmodal__close svg { width: 18px; height: 18px; fill: none; stroke: var(--text-strong); stroke-width: 1.6; stroke-linecap: round; }
+.pmodal__close:hover { background: var(--text-strong); }
+.pmodal__close:hover svg { stroke: #fff; }
+.pmodal__eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin: 0 0 14px; }
+.pmodal__title { font-size: clamp(36px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -0.02em; font-weight: 500; margin: 0 0 18px; }
+.pmodal__lede { font-size: 20px; line-height: 1.5; color: var(--text-body); max-width: 640px; margin: 0 0 36px; }
+.pmodal__media { border-radius: 14px; overflow: hidden; background: #eee; margin: 0 auto 48px; width: fit-content; max-width: 100%; }
+.pmodal__media video { display: block; max-width: 100%; height: auto; max-height: 560px; }
+.pmodal__media--tall video { max-height: 640px; }
+.pmodal__media--wide { width: 100%; }
+.pmodal__media--wide video { width: 100%; max-height: none; }
+.pmodal__section { display: grid; grid-template-columns: 220px 1fr; gap: 32px; padding: 28px 0; border-top: 1px solid var(--line); }
+.pmodal__section h3 { font-size: 17px; font-weight: 500; line-height: 1.35; margin: 0; }
+.pmodal__section p { font-size: 16px; line-height: 1.65; color: var(--text-soft); margin: 0; }
+.pmodal__gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+.pmodal__gallery:empty { display: none; }
+.pmodal__gallery img { width: 100%; height: auto; border-radius: 12px; display: block; background: #eee; }
+@media (max-width: 767px) {
+  .pmodal__panel { padding: 40px 22px 32px; }
+  .pmodal__close { margin: -24px -10px 0 0; }
+  .pmodal__section { grid-template-columns: 1fr; gap: 10px; }
+  .pmodal__gallery { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,51 @@
+/* Selected works */
+.work { padding-block: var(--band); cursor: pointer; }
+.work__grid {
+  --cg: clamp(40px, 9vw, 129px);
+  display: grid; grid-template-columns: minmax(0, 323fr) minmax(0, 436fr) minmax(0, 323fr); column-gap: var(--cg);
+}
+.work__col { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; }
+.work__intro { display: flex; flex-direction: column; gap: 24px; }
+.work__intro .muted + .muted { margin-top: -8px; }
+.work__title { font-weight: 500; font-size: 24px; line-height: 1.2; }
+.work__title a { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 0.6s var(--ease-liquid); }
+.work__title a:hover { background-size: 100% 1px; }
+
+.work__mid { position: relative; display: flex; align-items: center; }
+.work__mid::before, .work__mid::after {
+  content: ""; position: absolute; top: calc(-1 * var(--band)); bottom: calc(-1 * var(--band));
+  width: 1px; background: var(--line); transform-origin: top; transform: scaleY(var(--draw, 1));
+}
+.work__mid::before { left: calc(var(--cg) / -2); }
+.work__mid::after { right: calc(var(--cg) / -2); }
+.work__media { display: block; position: relative; width: 100%; overflow: hidden; background: var(--media-bg); }
+.work__media--tall, .work__media--jove, .work__media--lead { aspect-ratio: 436 / 569; }
+.work__media img, .work__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.fact { display: flex; flex-direction: column; gap: 8px; }
+.fact dt { font-weight: 500; }
+.fact dd { color: var(--muted); }
+
+/* Tool chips */
+.tools { display: flex; gap: 6px; align-items: flex-start; }
+.tool {
+  position: relative; width: 32px; height: 32px; display: grid; place-items: center;
+  border-radius: var(--radius-chip); background: var(--tile); color: var(--ink-72);
+  transition: background-color 0.4s var(--ease-liquid), color 0.4s var(--ease-liquid), border-radius 0.4s var(--ease-liquid);
+}
+.tool svg { width: 15px; height: 15px; fill: currentColor; }
+.tool[data-cursor-pill="Metabase"] svg { width: 19px; height: 19px; }
+.tool:hover { background: var(--tile-hover); color: var(--ink); border-radius: var(--radius-tile); }
+
+/* The strip pins and slides sideways (works.js) */
+.works__view { overflow: hidden; }
+.works__track { display: flex; width: max-content; will-change: transform; }
+.works__track > .work { flex: 0 0 100vw; width: 100vw; }
+
+@media (max-width: 900px) {
+  .work__grid { grid-template-columns: 1fr; row-gap: 40px; }
+  .work__mid { order: -1; }
+  .work__mid::before, .work__mid::after { display: none; }
+  .work__col { gap: 24px; }
+  .work__col:last-child { flex-direction: row; flex-wrap: wrap; gap: 24px 48px; justify-content: flex-start; }
+}

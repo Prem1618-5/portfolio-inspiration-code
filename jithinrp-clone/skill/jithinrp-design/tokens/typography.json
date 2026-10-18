@@ -1,0 +1,88 @@
+{
+  "families": [
+    "Awesome Serif Italic",
+    "Aeonik"
+  ],
+  "scale": {
+    "heading-1": {
+      "fontFamily": "Awesome Serif Italic",
+      "fontSize": "min(290px,(100vw - 2*var(--gutter))*0.2164)",
+      "fontWeight": "700",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "heading-2": {
+      "fontFamily": "Awesome Serif Italic",
+      "fontSize": "150px",
+      "fontWeight": "700",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "heading-3": {
+      "fontFamily": "Awesome Serif Italic",
+      "fontSize": "128px",
+      "fontWeight": "700",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "body": {
+      "fontFamily": "Aeonik",
+      "fontSize": "20px",
+      "fontWeight": "400",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "caption": {
+      "fontFamily": "Aeonik",
+      "fontSize": "12px",
+      "fontWeight": "400",
+      "lineHeight": null,
+      "source": "css"
+    }
+  },
+  "fontFaces": [
+    {
+      "family": "Aeonik",
+      "src": "https://jithinrp.com/fonts/Aeonik-Regular.woff2",
+      "format": "woff2",
+      "weight": "400"
+    },
+    {
+      "family": "Aeonik",
+      "src": "https://jithinrp.com/fonts/Aeonik-Medium.woff2",
+      "format": "woff2",
+      "weight": "500"
+    },
+    {
+      "family": "Aeonik",
+      "src": "https://jithinrp.com/fonts/Aeonik-Bold.woff2",
+      "format": "woff2",
+      "weight": "700"
+    },
+    {
+      "family": "Awesome Serif Italic",
+      "src": "https://jithinrp.com/fonts/AwesomeSerifItalic-VF.woff2",
+      "format": "woff2",
+      "weight": "300"
+    },
+    {
+      "family": "Geist Pixel",
+      "src": "https://jithinrp.com/fonts/GeistPixel-VF.woff2",
+      "format": "woff2",
+      "weight": "400"
+    },
+    {
+      "family": "Digital Planers",
+      "src": "https://jithinrp.com/fonts/DigitalPlaners.woff2",
+      "format": "woff2",
+      "weight": "400"
+    }
+  ],
+  "rules": {
+    "maxSizesPerScreen": 4,
+    "headingWeightRange": "600-700",
+    "bodyWeight": 400,
+    "lineHeightBody": 1.5,
+    "lineHeightHeading": 1.2
+  }
+}
